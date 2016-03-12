@@ -255,6 +255,34 @@ predict(modFit_lda,newdata=data_test)</code></pre>
 ## 18  1.0636972  0.27749127  0.8729316 -2.08776197
 ## 19 -0.1253382  0.38231309  0.8768318 -0.61619131
 ## 20  0.9027199  2.67342310  2.2256190 -0.93306198</code></pre>
+<p>using rf</p>
+<pre class="r"><code>intrain=createDataPartition(y=data_train$classe,p=.7,list = FALSE)
+training=data_train[intrain,] 
+testing=data_train[-intrain,]
+
+ctrl &lt;- trainControl(allowParallel=T, method=&quot;cv&quot;, number=4)
+
+modFit_rf=train(classe~roll_dumbbell+yaw_dumbbell+pitch_dumbbell+total_accel_dumbbell+gyros_dumbbell_x+gyros_dumbbell_y+gyros_dumbbell_z+accel_dumbbell_x+accel_dumbbell_y+accel_dumbbell_z+magnet_dumbbell_x+magnet_dumbbell_x+
+               magnet_dumbbell_y+magnet_dumbbell_z,method=&quot;rf&quot;,data=training,trControl=ctrl)</code></pre>
+<pre><code>## Loading required package: randomForest</code></pre>
+<pre><code>## randomForest 4.6-12</code></pre>
+<pre><code>## Type rfNews() to see new features/changes/bug fixes.</code></pre>
+<pre><code>## 
+## Attaching package: 'randomForest'</code></pre>
+<pre><code>## The following object is masked from 'package:ggplot2':
+## 
+##     margin</code></pre>
+<pre class="r"><code>table(predict(modFit_rf,newdata=testing),testing$classe)</code></pre>
+<pre><code>##    
+##        A    B    C    D    E
+##   A 1606   77   28   39    8
+##   B   10  985   42   13   44
+##   C   18   50  892   76   40
+##   D   27    9   39  797   43
+##   E   13   18   25   39  947</code></pre>
+<pre class="r"><code>predict(modFit_rf,newdata=data_test)</code></pre>
+<pre><code>##  [1] A A B A A B D B A A B C B A B E A B B B
+## Levels: A B C D E</code></pre>
 
 
 

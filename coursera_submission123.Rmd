@@ -37,5 +37,18 @@ conf=table(model,data_train$class)
 confusionMatrix(conf)
 #predict test data using the trained model
 predict(modFit_lda,newdata=data_test)
-
 ```
+using rf 
+```{r}
+intrain=createDataPartition(y=data_train$classe,p=.7,list = FALSE)
+training=data_train[intrain,] 
+testing=data_train[-intrain,]
+
+ctrl <- trainControl(allowParallel=T, method="cv", number=4)
+
+modFit_rf=train(classe~roll_dumbbell+yaw_dumbbell+pitch_dumbbell+total_accel_dumbbell+gyros_dumbbell_x+gyros_dumbbell_y+gyros_dumbbell_z+accel_dumbbell_x+accel_dumbbell_y+accel_dumbbell_z+magnet_dumbbell_x+magnet_dumbbell_x+
+               magnet_dumbbell_y+magnet_dumbbell_z,method="rf",data=training,trControl=ctrl)
+table(predict(modFit_rf,newdata=testing),testing$classe)
+
+predict(modFit_rf,newdata=data_test)
+``` 
